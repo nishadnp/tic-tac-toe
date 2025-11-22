@@ -23,3 +23,11 @@ const Gameboard =  (function() {
         setMark,
     };
 })();
+
+const createPlayer = (name, mark) => {
+    return {
+        name, 
+        mark,
+    }
+}
+
