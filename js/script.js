@@ -14,7 +14,11 @@ const Gameboard =  (function() {
         {
             return false;
         }
-        gameboard[position] = mark;
+        else {
+            gameboard[position] = mark;
+            return true;
+        }
+        
     }
 
     return {
@@ -42,9 +46,12 @@ const GameController = (function() {
     }
 
     function playRound(position) {
-        if ((checkGameWin() || checkGameTie())) return;
-        Gameboard.setMark(position, currentPlayer.mark);
-        switchPlayer();
+        if (checkGameWin() || checkGameTie()) return;
+        const isMoveValid = Gameboard.setMark(position, currentPlayer.mark);
+        if (isMoveValid) {
+            switchPlayer();
+        }
+        console.log(currentPlayer);
     }
 
     function checkGameWin() {
