@@ -1,3 +1,7 @@
+:root {
+    --game-grid-size: repeat(3, 150px);
+}
+
 *, ::before, ::after {
     box-sizing: border-box;
 }
@@ -7,4 +11,39 @@ html, body {
     padding: 0;
     font-family: inherit;
     line-height: 1.5;
+}
+
+body {
+    background: linear-gradient(135deg, #4f4a43 0%, #2f2c27 100%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+#game-grid {
+    background-color: #5c5c5c;  
+    max-width: fit-content;
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    display: grid;
+    grid-template-columns: var(--game-grid-size);
+    grid-template-rows: var(--game-grid-size);
+}
+
+#game-grid > div {
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+#game-grid > div:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: background-color 0.3s ease;
 }
