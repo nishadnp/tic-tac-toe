@@ -1,5 +1,5 @@
 const Gameboard =  (function() {
-    let gameboard = ['X','X','X','X','O','O','O','O',''];
+    let gameboard = ['','','','','','','','',''];
     
     function getBoard() {
         return gameboard;
@@ -46,16 +46,33 @@ const GameController = (function() {
     }
 
     function playRound(position) {
+        console.log(currentPlayer);
         if (checkGameWin() || checkGameTie()) return;
         const isMoveValid = Gameboard.setMark(position, currentPlayer.mark);
         if (isMoveValid) {
             switchPlayer();
         }
-        console.log(currentPlayer);
+        
     }
 
     function checkGameWin() {
-        // win logic to be written later
+        const winPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], 
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], 
+            [0, 4, 8], [2, 4, 6]
+        ];
+        const board = Gameboard.getBoard();
+
+        for (combo of winPatterns) {
+            const [a, b, c] = combo;
+
+            if (board[a] !== '' && 
+                board[b] === board[c] && 
+                board[a] === board[c]) {
+                    console.log(currentPlayer.name + "wins!");
+                    return true;
+                }
+        }
         
         return false;
     }
