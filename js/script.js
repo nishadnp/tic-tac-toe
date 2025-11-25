@@ -40,19 +40,27 @@ const GameController = (function() {
     const playerTwo = createPlayer("Player 2", "O");
 
     let currentPlayer = playerOne;
+    let gameResult = null;
+    let stopGame = false;
 
     function switchPlayer() {
         currentPlayer = (currentPlayer === playerOne) ? playerTwo : playerOne;
     }
 
     function playRound(position) {
+        if (stopGame) {
+            resetGame();
+        }
+        
         console.log(currentPlayer);
-        if (checkGameWin() || checkGameTie()) return;
         const isMoveValid = Gameboard.setMark(position, currentPlayer.mark);
+        console.log(Gameboard.getBoard());
+        if (checkGameWin() || checkGameTie()) {
+            return;
+        }
         if (isMoveValid) {
             switchPlayer();
         }
-        
     }
 
     function checkGameWin() {
@@ -69,7 +77,9 @@ const GameController = (function() {
             if (board[a] !== '' && 
                 board[b] === board[c] && 
                 board[a] === board[c]) {
-                    console.log(currentPlayer.name + "wins!");
+                    gameResult = currentPlayer.name + " WINS!"
+                    console.log(gameResult);
+                    stopGame = true;
                     return true;
                 }
         }
@@ -80,13 +90,27 @@ const GameController = (function() {
     function checkGameTie() {
         if (Gameboard.getBoard().includes('')) return false;
         else {
-            console.log("TIE!")
+            gameResult = "TIE!"
+            console.log(gameResult);
+            stopGame = true;
             return true;
         }
     }
 
+    function getResult() {
+        return gameResult;
+    }
+
+    function resetGame() {
+        currentPlayer = playerOne;
+        gameResult = null;
+        Gameboard.resetBoard();
+        stopGame = false;
+    }
+
     return {
         playRound,
+        getResult,
     }
 
 })();
@@ -102,6 +126,13 @@ const DisplayController = (function() {
 
             e.target.textContent = Gameboard.getBoard()[index]; 
             
+            console.log(GameController.getResult());
+
+            if (GameController.getResult()) {
+                const displayResult = document.createElement("output");
+                displayResult.textContent = GameController.getResult();
+                document.body.append(displayResult);
+            }
         }
     });
 
