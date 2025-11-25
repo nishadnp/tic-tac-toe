@@ -117,9 +117,25 @@ const GameController = (function() {
 
 const DisplayController = (function() {
     const gameGrid = document.getElementById('game-grid');
+    const divs = [...gameGrid.getElementsByTagName('div')];
+
+    function displayReset() {
+        divs.forEach(div => {
+            div.textContent = '';
+        });
+        const result = document.querySelector('output');
+        document.body.removeChild(result);
+    }
+
+    let reset = false;
     gameGrid.addEventListener('click', e => {
         if (e.target.matches('div')) {
-            const divs = [...gameGrid.getElementsByTagName('div')];
+
+            if (reset) {
+                displayReset();
+                reset = false;
+            }
+            console.log(reset);
             const index = divs.indexOf(e.target);
 
             GameController.playRound(index);
@@ -132,9 +148,9 @@ const DisplayController = (function() {
                 const displayResult = document.createElement("output");
                 displayResult.textContent = GameController.getResult();
                 document.body.append(displayResult);
+                reset = true;
             }
         }
     });
-
 
 })();
