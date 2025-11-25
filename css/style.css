@@ -24,6 +24,13 @@ body {
     gap: 30px;
 }
 
+h1 {
+    font-size: 3rem;
+    color: #fff;
+    margin-top: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
 #reset-btn {
     padding: 10px 20px;
     font-size: 1.2rem;
