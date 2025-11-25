@@ -90,3 +90,20 @@ const GameController = (function() {
     }
 
 })();
+
+const DisplayController = (function() {
+    const gameGrid = document.getElementById('game-grid');
+    gameGrid.addEventListener('click', e => {
+        if (e.target.matches('div')) {
+            const divs = [...gameGrid.getElementsByTagName('div')];
+            const index = divs.indexOf(e.target);
+
+            GameController.playRound(index);
+
+            e.target.textContent = Gameboard.getBoard()[index]; 
+            
+        }
+    });
+
+
+})();
