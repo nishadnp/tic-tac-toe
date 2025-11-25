@@ -134,30 +134,38 @@ const GameController = (function() {
 
 })();
 
+
 // DisplayController module: handles all DOM interactions
 const DisplayController = (function() {
     const gameGrid = document.getElementById('game-grid');
     const divs = [...gameGrid.getElementsByTagName('div')];
+
+    let fullReset = false;  // Tracks if visual reset is needed on next click in game
 
     // Clears the board visually and removes the result display
     function displayReset() {
         divs.forEach(div => {
             div.textContent = '';
         });
-        const result = document.querySelector('output');
-        document.body.removeChild(result);
+
+        // Trigger if full reset including output of the game also to be cleared
+        if (fullReset) {
+            const result = document.querySelector('output');
+            document.body.removeChild(result);
+        }
+
+        fullReset = false;
     }
 
-    let reset = false;  // Tracks if visual reset is needed on next click
+    document.getElementById('reset-btn').addEventListener('click', displayReset);
 
     // Handle clicks on the game grid
     gameGrid.addEventListener('click', e => {
         if (e.target.matches('div')) {
 
-            // If reset flag is true, clear visuals first
-            if (reset) {
+            // If fullReset flag is true, clear visuals first
+            if (fullReset) {
                 displayReset();
-                reset = false;
             }
             
             const index = divs.indexOf(e.target);
@@ -173,7 +181,7 @@ const DisplayController = (function() {
                 const displayResult = document.createElement("output");
                 displayResult.textContent = GameController.getResult();
                 document.body.append(displayResult);
-                reset = true;
+                fullReset = true;
             }
         }
     });
