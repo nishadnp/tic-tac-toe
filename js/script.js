@@ -206,6 +206,9 @@ const DisplayController = (function() {
                 displayResult.textContent = GameController.getResult();
                 document.querySelector('main').append(displayResult);
                 outputReset = true;
+
+                // Ensure further clicking of grid cell is prevented after game ends
+                startGame = false;
             }
         }
     });
