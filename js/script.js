@@ -25,7 +25,6 @@ const Gameboard =  (function() {
             gameboard[position] = mark;
             return true;
         }
-        
     }
 
     // Expose public methods
@@ -96,6 +95,7 @@ const GameController = (function() {
             [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
             [0, 4, 8], [2, 4, 6]    // Diagonals
         ];
+        
         const board = Gameboard.getBoard();
 
         // Loop through all win combinations
@@ -147,7 +147,6 @@ const GameController = (function() {
         getResult,
         resetGame,
     }
-
 })();
 
 
@@ -205,7 +204,7 @@ const DisplayController = (function() {
                 const displayResult = document.createElement("output");
                 displayResult.id = "display-result"
                 displayResult.textContent = GameController.getResult();
-                document.body.append(displayResult);
+                document.querySelector('main').append(displayResult);
                 outputReset = true;
             }
         }
@@ -230,7 +229,7 @@ const DisplayController = (function() {
         // Remove win or tie output if present
         if (outputReset) {
             const result = document.getElementById('display-result');
-            document.body.removeChild(result);
+            document.querySelector('main').removeChild(result);
             outputReset = false;
         }
 
