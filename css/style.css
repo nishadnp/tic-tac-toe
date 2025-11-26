@@ -14,14 +14,23 @@ html, body {
 }
 
 body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    line-height: 1.5;
     background: linear-gradient(135deg, #4f4a43 0%, #2f2c27 100%);
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 30px;
+}
+
+header {
+    display: flex;
+    justify-content: center;
 }
 
 h1 {
@@ -29,6 +38,15 @@ h1 {
     color: #fff;
     margin-top: 20px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
 }
 
 #playername-fields {
@@ -76,7 +94,7 @@ button {
     flex: 1;
     padding: 10px 20px;
     font-size: 1.2rem;
-    font-weight: bold;
+    font-weight: 700;
     color: #fff;
     background-color: rgba(255, 255, 255, 0.15);
     border: 2px solid rgba(255, 255, 255, 0.3);
@@ -163,3 +181,24 @@ button:disabled {
     background: rgba(255, 255, 255, 0.25);
     transform: scale(1.05);
 }
+
+footer {
+    width: 100%;
+    padding: 12px 0;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #fff;
+    background: rgba(47, 44, 39, 0.6);  /* matches your page gradient */
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
+    border-radius: 0 0 10px 10px;
+    position: relative;  /* optional if you want fixed at bottom, else leave static */
+    margin-top: 0;
+}
+
+footer a {
+    color: #4682b4;
+    text-decoration: none;
+    font-weight: 700;
+}
+
