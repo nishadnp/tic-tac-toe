@@ -48,12 +48,21 @@ const createPlayer = (name, mark) => {
 
 // GameController module: handles game logic and turn management
 const GameController = (function() {
-    const playerOne = createPlayer("Player 1", "X");
-    const playerTwo = createPlayer("Player 2", "O");
 
-    let currentPlayer = playerOne;  // Tracks whose turn it is
+    let playerOne = null;
+    let playerTwo = null;
+    let currentPlayer = null;   // Tracks whose turn it is
+    
+    let startGame = false;
     let gameResult = null;  // Stores win or tie message
-    let stopGame = false;   // Flag to prevent moves after game ends
+
+    function setPlayers(name1, name2) {
+        playerOne = createPlayer(name1, "X");
+        playerTwo = createPlayer(name2, "O");
+        currentPlayer = playerOne;
+        startGame = true;
+    }
+        
 
     // Switch turns between players
     function switchPlayer() {
@@ -62,8 +71,8 @@ const GameController = (function() {
 
     // Execute a round of play at a given board position
     function playRound(position) {
-        if (stopGame) {
-            resetGame();
+        if (!startGame) {
+            return;
         }
         
         const isMoveValid = Gameboard.setMark(position, currentPlayer.mark);
@@ -92,12 +101,11 @@ const GameController = (function() {
             const [a, b, c] = combo;
 
             if (board[a] !== '' && 
-                board[b] === board[c] && 
+                board[a] === board[b] && 
                 board[a] === board[c]) {
                     gameResult = currentPlayer.name + " WINS!"
-                    stopGame = true;
                     return true;
-                }
+            }
         }
 
         return false;
@@ -108,7 +116,6 @@ const GameController = (function() {
         if (Gameboard.getBoard().includes('')) return false;
         else {
             gameResult = "TIE!"
-            stopGame = true;
             return true;
         }
     }
@@ -120,16 +127,19 @@ const GameController = (function() {
 
     // Reset game to initial state
     function resetGame() {
-        currentPlayer = playerOne;
-        gameResult = null;
         Gameboard.resetBoard();
-        stopGame = false;
+        playerOne = null;
+        playerTwo = null;
+        gameResult = null;
+        startGame = false;
     }
 
     // Expose public methods
     return {
+        setPlayers,
         playRound,
         getResult,
+        resetGame,
     }
 
 })();
@@ -137,36 +147,32 @@ const GameController = (function() {
 
 // DisplayController module: handles all DOM interactions
 const DisplayController = (function() {
+
+    let startGame = false;
+    let outputReset = false;  // Tracks if full output reset is needed
+
+    const startButton = document.getElementById('start-btn');
+    const resetButton = document.getElementById('reset-btn');
+
     const gameGrid = document.getElementById('game-grid');
     const divs = [...gameGrid.getElementsByTagName('div')];
 
-    let fullReset = false;  // Tracks if visual reset is needed on next click in game
+    startButton.addEventListener('click', () => {
+        const playerOneName = document.getElementById('player-1').value;
+        const playerTwoName = document.getElementById('player-2').value;
+        GameController.setPlayers(playerOneName, playerTwoName);
+        
+        startButton.disabled = true;
+        resetButton.disabled = false;
 
-    // Clears the board visually and removes the result display
-    function displayReset() {
-        divs.forEach(div => {
-            div.textContent = '';
-        });
-
-        // Trigger if full reset including output of the game also to be cleared
-        if (fullReset) {
-            const result = document.querySelector('output');
-            document.body.removeChild(result);
-        }
-
-        fullReset = false;
-    }
-
-    document.getElementById('reset-btn').addEventListener('click', displayReset);
+        startGame = true;
+    });    
 
     // Handle clicks on the game grid
     gameGrid.addEventListener('click', e => {
         if (e.target.matches('div')) {
 
-            // If fullReset flag is true, clear visuals first
-            if (fullReset) {
-                displayReset();
-            }
+            if (!startGame) return;
             
             const index = divs.indexOf(e.target);
 
@@ -176,14 +182,38 @@ const DisplayController = (function() {
             // Update clicked cell visually            
             e.target.textContent = Gameboard.getBoard()[index]; 
 
-            // If game ended, show result and set reset flag
+            // If game ended, show result and set output reset flag
             if (GameController.getResult()) {
                 const displayResult = document.createElement("output");
                 displayResult.textContent = GameController.getResult();
                 document.body.append(displayResult);
-                fullReset = true;
+                outputReset = true;
             }
         }
     });
+
+    // Reset button click handler
+    resetButton.addEventListener('click', displayReset);
+
+
+    // Clears the board visually and removes the result display
+    function displayReset() {
+        startGame = false;
+        divs.forEach(div => {
+            div.textContent = '';
+        });
+
+        // Trigger full reset, if including output of the game also to be cleared
+        if (outputReset) {
+            const result = document.querySelector('output');
+            document.body.removeChild(result);
+            outputReset = false;
+        }
+
+        GameController.resetGame();
+
+        resetButton.disabled = true;
+        startButton.disabled = false;
+    }
 
 })();

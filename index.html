@@ -9,7 +9,19 @@
 </head>
 <body>
     <h1>TIC TAC TOE</h1>
-    <button type="button" id="reset-btn">RESET</button>
+    <form id="playername-fields">
+        <label for="player-1">
+            <input type="text" name="" id="player-1" value="Player 1" placeholder="Enter Player 1 Name" />
+        </label>
+        <label for="player-2">
+            <input type="text" name="" id="player-2" value="Player 2" placeholder="Enter Player 2 Name" />
+        </label>
+        <div class="btn-group">
+            <button type="button" id="start-btn">START</button>
+            <button type="button" id="reset-btn" disabled>RESET</button>
+        </div>
+        
+    </form>
     <div id="game-grid">
         <div></div>
         <div></div>

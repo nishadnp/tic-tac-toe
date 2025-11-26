@@ -31,7 +31,22 @@ h1 {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
-#reset-btn {
+#playername-fields {
+    width: 450px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.btn-group {
+    width: inherit;
+    display: flex;
+    gap: 20px;
+}
+
+button {
+    flex: 1;
     padding: 10px 20px;
     font-size: 1.2rem;
     font-weight: bold;
@@ -43,9 +58,17 @@ h1 {
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-#reset-btn:hover {
+button:hover {
     background-color: rgba(255, 255, 255, 0.3);
     transform: scale(1.05);
+}
+
+button:disabled {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.4);
+    cursor: not-allowed;
+    transform: none; 
 }
 
 
