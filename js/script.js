@@ -56,6 +56,7 @@ const GameController = (function() {
     let startGame = false;
     let gameResult = null;  // Stores win or tie message
 
+    // Create both players and start the game
     function setPlayers(name1, name2) {
         playerOne = createPlayer(name1, "X");
         playerTwo = createPlayer(name2, "O");
@@ -97,6 +98,7 @@ const GameController = (function() {
         ];
         const board = Gameboard.getBoard();
 
+        // Loop through all win combinations
         for (combo of winPatterns) {
             const [a, b, c] = combo;
 
@@ -108,7 +110,7 @@ const GameController = (function() {
             }
         }
 
-        return false;
+        return false;   // No win found
     }
 
     // Check if game is a tie (board full without a winner)
@@ -120,7 +122,7 @@ const GameController = (function() {
         }
     }
 
-    // Return current game result
+    // Return current game result (null until game ends)
     function getResult() {
         return gameResult;
     }
@@ -134,6 +136,7 @@ const GameController = (function() {
         startGame = false;
     }
 
+    // Return current player's name (for UI updates)
     let getCurrentPlayerName = () => currentPlayer.name;
 
     // Expose public methods
@@ -154,16 +157,21 @@ const DisplayController = (function() {
     let startGame = false;
     let outputReset = false;  // Tracks if result output reset is needed
 
+    // DOM references for buttons and status display
     const startButton = document.getElementById('start-btn');
     const resetButton = document.getElementById('reset-btn');
     const statusOutput = document.getElementById('game-status');
 
+    // Game grid cells
     const gameGrid = document.getElementById('game-grid');
     const divs = [...gameGrid.getElementsByTagName('div')];
 
+      // Handle clicking Start button, initializes players and begins game
     startButton.addEventListener('click', () => {
         const playerOneName = document.getElementById('player-1').value;
         const playerTwoName = document.getElementById('player-2').value;
+
+        // Pass names to GameController to create players
         GameController.setPlayers(playerOneName, playerTwoName);
         
         startButton.disabled = true;
@@ -171,6 +179,7 @@ const DisplayController = (function() {
 
         startGame = true;
 
+        // First turn always Player 1
         statusOutput.textContent = GameController.getCurrentPlayerName() + "'s Turn...";
     });    
 
@@ -178,7 +187,7 @@ const DisplayController = (function() {
     gameGrid.addEventListener('click', e => {
         if (e.target.matches('div')) {
 
-            if (!startGame) return;
+            if (!startGame) return; // Ignore clicks until game starts
             
             const index = divs.indexOf(e.target);
 
@@ -190,7 +199,7 @@ const DisplayController = (function() {
             
             statusOutput.textContent = GameController.getCurrentPlayerName() + "'s Turn...";
 
-            // If game ended, show result and set output reset flag
+            // Update live status unless game is over
             if (GameController.getResult()) {
                 statusOutput.textContent = "Game Ended!";
                 const displayResult = document.createElement("output");
@@ -206,23 +215,29 @@ const DisplayController = (function() {
     resetButton.addEventListener('click', displayReset);
 
 
-    // Clears the board visually and removes the result display
+    // Function to clear the board visually and removes the result display
     function displayReset() {
         startGame = false;
+
+        // Clear board tiles
         divs.forEach(div => {
             div.textContent = '';
         });
 
+        // Reset game-status text
         statusOutput.textContent = "Game Yet To Start!";
-        // Trigger full reset, if including output of the game also to be cleared
+        
+        // Remove win or tie output if present
         if (outputReset) {
             const result = document.getElementById('display-result');
             document.body.removeChild(result);
             outputReset = false;
         }
 
+        // Reset game logic state
         GameController.resetGame();
 
+        // Restore button states
         resetButton.disabled = true;
         startButton.disabled = false;
     }
