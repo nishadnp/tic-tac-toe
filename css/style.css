@@ -123,21 +123,43 @@ button:disabled {
   transition: background-color 0.3s ease;
 }
 
-output {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 1.5rem;
-    font-weight: bold;
+/* Status output (current turn) */
+#game-status {
+    margin-top: 15px;
+    padding: 8px 16px;
+    font-size: 1.2rem;
+    font-weight: 500;
     color: #fff;
-    background-color: rgba(255, 255, 255, 0.15);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
     text-align: center;
-    min-width: 180px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    min-width: 200px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
-output:hover {
-    background-color: rgba(255, 255, 255, 0.3);
+#game-status:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: scale(1.02);
+}
+
+#display-result {
+    margin-top: 20px;
+    padding: 12px 24px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    text-align: center;
+    min-width: 220px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#display-result:hover {
+    background: rgba(255, 255, 255, 0.25);
     transform: scale(1.05);
 }
