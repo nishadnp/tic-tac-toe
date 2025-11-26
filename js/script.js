@@ -134,10 +134,13 @@ const GameController = (function() {
         startGame = false;
     }
 
+    let getCurrentPlayerName = () => currentPlayer.name;
+
     // Expose public methods
     return {
         setPlayers,
         playRound,
+        getCurrentPlayerName,
         getResult,
         resetGame,
     }
@@ -149,10 +152,11 @@ const GameController = (function() {
 const DisplayController = (function() {
 
     let startGame = false;
-    let outputReset = false;  // Tracks if full output reset is needed
+    let outputReset = false;  // Tracks if result output reset is needed
 
     const startButton = document.getElementById('start-btn');
     const resetButton = document.getElementById('reset-btn');
+    const statusOutput = document.getElementById('game-status');
 
     const gameGrid = document.getElementById('game-grid');
     const divs = [...gameGrid.getElementsByTagName('div')];
@@ -166,6 +170,8 @@ const DisplayController = (function() {
         resetButton.disabled = false;
 
         startGame = true;
+
+        statusOutput.textContent = GameController.getCurrentPlayerName() + "'s Turn...";
     });    
 
     // Handle clicks on the game grid
@@ -180,11 +186,15 @@ const DisplayController = (function() {
             GameController.playRound(index);
 
             // Update clicked cell visually            
-            e.target.textContent = Gameboard.getBoard()[index]; 
+            e.target.textContent = Gameboard.getBoard()[index];
+            
+            statusOutput.textContent = GameController.getCurrentPlayerName() + "'s Turn...";
 
             // If game ended, show result and set output reset flag
             if (GameController.getResult()) {
+                statusOutput.textContent = "Game Ended!";
                 const displayResult = document.createElement("output");
+                displayResult.id = "display-result"
                 displayResult.textContent = GameController.getResult();
                 document.body.append(displayResult);
                 outputReset = true;
@@ -203,9 +213,10 @@ const DisplayController = (function() {
             div.textContent = '';
         });
 
+        statusOutput.textContent = "Game Yet To Start!";
         // Trigger full reset, if including output of the game also to be cleared
         if (outputReset) {
-            const result = document.querySelector('output');
+            const result = document.getElementById('display-result');
             document.body.removeChild(result);
             outputReset = false;
         }
