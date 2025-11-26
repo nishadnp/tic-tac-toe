@@ -165,10 +165,22 @@ const DisplayController = (function() {
     const gameGrid = document.getElementById('game-grid');
     const divs = [...gameGrid.getElementsByTagName('div')];
 
-      // Handle clicking Start button, initializes players and begins game
+    // Handle clicking Start button, initializes players and begins game
     startButton.addEventListener('click', () => {
+
         const playerOneName = document.getElementById('player-1').value;
         const playerTwoName = document.getElementById('player-2').value;
+
+        // Reset any previous warning styles
+        document.getElementById('player-1').style.borderColor = 'rgba(255, 255, 255, 0.3)';
+        document.getElementById('player-2').style.borderColor = 'rgba(255, 255, 255, 0.3)';
+
+        // Prevent and warn about empty fields
+        if (!(playerOneName && playerTwoName)) { 
+            if (!playerOneName) document.getElementById('player-1').style.borderColor = 'red';
+            if (!playerTwoName) document.getElementById('player-2').style.borderColor = 'red';
+            return;
+        }
 
         // Pass names to GameController to create players
         GameController.setPlayers(playerOneName, playerTwoName);
